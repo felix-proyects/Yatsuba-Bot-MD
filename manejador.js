@@ -7,6 +7,9 @@ import * as contextos from './implementar/contextos.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+// Define aquí los prefijos que quieres soportar
+const prefijos = ['#', '.']
+
 export class Handler {
   constructor(conn) {
     this.conn = conn
@@ -25,7 +28,6 @@ export class Handler {
     }
   }
 
-  // Helpers de permisos
   esCreador(jid) {
     return global.creador.includes(jid?.replace(/[^0-9]/g, ''))
   }
@@ -45,34 +47,48 @@ export class Handler {
     }
   }
 
+  // Esta función extrae el prefijo y comando del texto recibido
+  extraerComando(texto) {
+    for (let prefijo of prefijos) {
+      if (texto.startsWith(prefijo)) {
+        let body = texto.slice(prefijo.length).trim().split(/\s+/)
+        return { prefijo, comando: body[0].toLowerCase(), args: body.slice(1) }
+      }
+    }
+    return null
+  }
+
   async manejarMensaje(m) {
     let texto = m.message?.conversation || m.message?.extendedTextMessage?.text || m.body || ''
     if (!texto) return
 
-    const args = texto.trim().split(/\s+/)
-    const cmd = args[0].replace(/^([!#/.])/, '').toLowerCase()
+    // Buscar comando con prefijo
+    const extraido = this.extraerComando(texto)
+    if (!extraido) return
+
+    const { prefijo, comando, args } = extraido
 
     for (let handler of this.comandos) {
       if (!handler.command) continue
+      // Soporta múltiples triggers en handler.command
       const triggers = Array.isArray(handler.command) ? handler.command : [handler.command]
-      if (!triggers.includes(cmd)) continue
+      if (!triggers.map(str => str.toLowerCase()).includes(comando)) continue
 
-      // Restricciones clásicas
+      // Restricciones
       if (handler.onlyOwner && !this.esCreador(m.sender || m.participant || m.key?.participant)) {
-        await this.conn.sendMessage(m.chat, { text: this.mensajePermiso('creador', cmd) }, { quoted: m })
+        await this.conn.sendMessage(m.chat, { text: this.mensajePermiso('creador', prefijo + comando) }, { quoted: m })
         return
       }
       if (handler.onlyGroup && !this.esGrupo(m)) {
-        await this.conn.sendMessage(m.chat, { text: this.mensajePermiso('grupos', cmd) }, { quoted: m })
+        await this.conn.sendMessage(m.chat, { text: this.mensajePermiso('grupos', prefijo + comando) }, { quoted: m })
         return
       }
       if (handler.onlyBot && !this.esBot(m.sender || m.participant || m.key?.participant)) {
-        await this.conn.sendMessage(m.chat, { text: this.mensajePermiso('bot', cmd) }, { quoted: m })
+        await this.conn.sendMessage(m.chat, { text: this.mensajePermiso('bot', prefijo + comando) }, { quoted: m })
         return
       }
 
       try {
-        // Ejecutar comando, pasando contextos y globales
         await handler(m, {
           conn: this.conn,
           args,
