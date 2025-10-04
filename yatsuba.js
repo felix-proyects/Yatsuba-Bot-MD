@@ -18,9 +18,6 @@ global.apis = apis;
 
 // Configuraciones para vincular 
 
-global.primario = './conexion/principal';
-global.sub = './conexion/subbots';
-
 global.sessions = "Session"           // Carpeta de sesión principal del bot
 global.jadi = "JadiBots"              // Carpeta para almacenar las sesiones de subbots
 global.Jadibots = true
