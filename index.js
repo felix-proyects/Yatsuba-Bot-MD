@@ -1,3 +1,5 @@
+global.opts = global.opts || {};
+global.opts.legacy = false;
 import readline from 'readline'
 
 console.clear()
