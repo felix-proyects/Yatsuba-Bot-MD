@@ -16,8 +16,16 @@ global.moneda = 'Coins';
 import apis from './jsons/apis.json' assert { type: 'json' };
 global.apis = apis;
 
+// Configuraciones para vincular 
+
 global.primario = './conexion/principal';
 global.sub = './conexion/subbots';
+
+global.sessions = "Session"           // Carpeta de sesión principal del bot
+global.jadi = "JadiBots"              // Carpeta para almacenar las sesiones de subbots
+global.Jadibots = true
+
+// Configuración final 
 
 global.update = 'yatsuba.js';
 global.tipo = 'Bot Principal';
