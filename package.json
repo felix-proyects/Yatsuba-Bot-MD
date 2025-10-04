@@ -1,0 +1,15 @@
+{
+  "name": "yatsuba-bot",
+  "version": "1.0.0",
+  "description": "BOT En proceso",
+  "type": "module",
+  "main": "consola.js",
+  "scripts": {
+    "start": "node consola.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.6",
+    "jimp": "^0.16.1",
+    "readline": "^1.3.0"
+  }
+}
