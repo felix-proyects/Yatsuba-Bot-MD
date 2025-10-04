@@ -1,5 +1,3 @@
-// index.js
-
 import { execSync } from 'child_process'
 import fs from 'fs'
 
@@ -19,7 +17,7 @@ import './yatsuba.js'
 import readline from 'readline'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { generarQR, generarCode, subbotQR, subbotCode } from './comandos/subs-conexion.js'
+import { conectarPrincipal, conectarSubbot } from './comandos/subs-conexion.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -53,34 +51,13 @@ const rl = readline.createInterface({
 rl.on('line', async (input) => {
   input = input.trim().toLowerCase()
   if (input === 'qr') {
-    await generarQR(path.join('./', global.sessions))
+    await conectarPrincipal({ tipo: 'qr' })
   } else if (input === 'code') {
-    await generarCode(path.join('./', global.sessions))
-  } else if (input === 'subqr' || input === 'subcode') {
-    // Simula un mensaje para la función subbotQR/subbotCode
-    let fakeMsg = {
-      chat: 'owner-console',
-      sender: 'console-owner@whatsapp.net',
-      fromMe: true,
-      args: [],
-      mentionedJid: [],
-    }
-    if (input === 'subqr') {
-      await subbotQR(fakeMsg, {
-        sendMessage: (chat, contenido) => {
-          if (contenido.text) console.log('[SUBBOT]', contenido.text)
-          if (contenido.image) console.log('[SUBBOT] (Imagen QR generada)')
-        },
-        reply: (chat, texto) => console.log('[SUBBOT]', texto)
-      }, [])
-    } else {
-      await subbotCode(fakeMsg, {
-        sendMessage: (chat, contenido) => {
-          if (contenido.text) console.log('[SUBBOT]', contenido.text)
-        },
-        reply: (chat, texto) => console.log('[SUBBOT]', texto)
-      }, [])
-    }
+    await conectarPrincipal({ tipo: 'code' })
+  } else if (input === 'subqr') {
+    await conectarSubbot({ tipo: 'qr' })
+  } else if (input === 'subcode') {
+    await conectarSubbot({ tipo: 'code' })
   } else {
     console.log('Opción no válida. Usa qr, code, subqr o subcode.')
   }
