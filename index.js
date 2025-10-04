@@ -1,6 +1,5 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
-import './settings.js'
-import './plugins/_allfake.js'
+import './yatsuba.js'
 import cfonts from 'cfonts'
 import { createRequire } from 'module'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -10,7 +9,7 @@ import fs, { readdirSync, statSync, unlinkSync, existsSync, mkdirSync, readFileS
 import yargs from 'yargs';
 import { spawn, execSync } from 'child_process'
 import lodash from 'lodash'
-import { yukiJadiBot } from './plugins/sockets-serbot.js'
+import { JadiBot } from './comandos/sockets-serbot.js'
 import chalk from 'chalk'
 import syntaxerror from 'syntax-error'
 import pino from 'pino'
@@ -22,23 +21,23 @@ import { Low, JSONFile } from 'lowdb'
 import store from './lib/store.js'
 const { proto } = (await import('@whiskeysockets/baileys')).default
 import pkg from 'google-libphonenumber'
-const { PhoneNumberUtil } = pkg
 const phoneUtil = PhoneNumberUtil.getInstance()
 const { DisconnectReason, useMultiFileAuthState, MessageRetryMap, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, jidNormalizedUser } = await import('@whiskeysockets/baileys')
 import readline, { createInterface } from 'readline'
+const { PhoneNumberUtil } = pkg
 import NodeCache from 'node-cache'
 const { CONNECTING } = ws
 const { chain } = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
 
 let { say } = cfonts
-console.log(chalk.magentaBright('\n❀ Iniciando...'))
-say('Yuki Suou', {
+console.log(chalk.magentaBright('\nIniciando...'))
+say('Yatsuba Nakano', {
 font: 'simple',
 align: 'left',
 gradient: ['green', 'white']
 })
-say('Made with love by Destroy', {
+say('Developed by DevFélix', {
 font: 'console',
 align: 'center',
 colors: ['cyan', 'magenta', 'yellow']
@@ -57,7 +56,7 @@ return createRequire(dir)
 global.timestamp = {start: new Date}
 const __dirname = global.__dirname(import.meta.url)
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
-global.prefix = new RegExp('^[#!./-]')
+global.prefix = new RegExp('^[#.]')
 
 global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile('database.json'))
 global.DATABASE = global.db;
@@ -152,7 +151,7 @@ if (!!phoneNumber) {
 addNumber = phoneNumber.replace(/[^0-9]/g, '')
 } else {
 do {
-phoneNumber = await question(chalk.bgBlack(chalk.bold.greenBright(`[ ✿ ]  Por favor, Ingrese el número de WhatsApp.\n${chalk.bold.magentaBright('---> ')}`)))
+phoneNumber = await question(chalk.bgBlack(chalk.bold.greenBright(`INGRESA EL NUMERO DE TELEFONO\n${chalk.bold.magentaBright('☆ ')}`)))
 phoneNumber = phoneNumber.replace(/\D/g,'')
 if (!phoneNumber.startsWith('+')) {
 phoneNumber = `+${phoneNumber}`
@@ -162,12 +161,12 @@ addNumber = phoneNumber.replace(/\D/g, '')
 setTimeout(async () => {
 let codeBot = await conn.requestPairingCode(addNumber)
 codeBot = codeBot.match(/.{1,4}/g)?.join("-") || codeBot
-console.log(chalk.bold.white(chalk.bgMagenta(`[ ✿ ]  Código:`)), chalk.bold.white(chalk.white(codeBot)))
+console.log(chalk.bold.white(chalk.bgMagenta(`CODIGO DE 8 DIGITOS: `)), chalk.bold.white(chalk.white(codeBot)))
 }, 3000)
 }}}}
 conn.isInit = false;
 conn.well = false;
-conn.logger.info(`[ ✿ ]  H E C H O\n`)
+conn.logger.info(`EXITO EN LA CONEXIÓN\n`)
 if (!opts['test']) {
 if (global.db) setInterval(async () => {
 if (global.db.data) await global.db.write()
@@ -187,20 +186,20 @@ global.timestamp.connect = new Date;
 if (global.db.data == null) loadDatabase()
 if (update.qr != 0 && update.qr != undefined || methodCodeQR) {
 if (opcion == '1' || methodCodeQR) {
-console.log(chalk.green.bold(`[ ✿ ]  Escanea este código QR`))}
+console.log(chalk.green.bold(`CODIGO QR`))}
 }
 if (connection === "open") {
 const userJid = jidNormalizedUser(conn.user.id)
 const userName = conn.user.name || conn.user.verifiedName || "Desconocido"
 await joinChannels(conn)
-console.log(chalk.green.bold(`[ ✿ ]  Conectado a: ${userName}`))
+console.log(chalk.green.bold(`${userName} fue conectado a ${botname}`))
 }
 let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
 if (connection === "close") {
 if ([401, 440, 428, 405].includes(reason)) {
-console.log(chalk.red(`→ (${code}) › Cierra la session Principal.`));
+console.log(chalk.red(`(${code}) Cierra la session Principal.`));
 }
-console.log(chalk.yellow("→ Reconectando el Bot Principal..."));
+console.log(chalk.yellow("EL BOT PRINCIPAL SE ESTA RECONECTANDO"));
 await global.reloadHandler(true).catch(console.error)
 }};
 process.on('uncaughtException', console.error);
@@ -219,7 +218,7 @@ try {
 global.conn.ws.close()
 } catch { }
 conn.ev.removeAllListeners()
-global.conn = makeWASocket(connectionOptions, {chats: oldChats})
+ats: oldChats})
 isInit = true
 }
 if (!isInit) {
@@ -244,51 +243,47 @@ isInit = false
 return true
 };
 process.on('unhandledRejection', (reason, promise) => {
-console.error("Rechazo no manejado detectado:", reason);
+console.error("MANEJO NO DETECTADO", reason);
 });
 
 global.rutaJadiBot = join(__dirname, `./${jadi}`)
-if (global.yukiJadibts) {
+if (global.jadibots) {
 if (!existsSync(global.rutaJadiBot)) {
 mkdirSync(global.rutaJadiBot, { recursive: true }) 
-console.log(chalk.bold.cyan(`ꕥ La carpeta: ${jadi} se creó correctamente.`))
+console.log(chalk.bold.cyan(`SE CREO ${jadi} CON ÉXITO.`))
 } else {
-console.log(chalk.bold.cyan(`ꕥ La carpeta: ${jadi} ya está creada.`)) 
+console.log(chalk.bold.cyan LA CARPETA ${jadi} NO EXISTE`)) 
 }
 const readRutaJadiBot = readdirSync(rutaJadiBot)
 if (readRutaJadiBot.length > 0) {
 const creds = 'creds.json'
 for (const gjbts of readRutaJadiBot) {
-const botPath = join(rutaJadiBot, gjbts)
-const readBotPath = readdirSync(botPath)
+const botuta = readdirSync(botPath)
 if (readBotPath.includes(creds)) {
-yukiJadiBot({pathYukiJadiBot: botPath, m: null, conn, args: '', usedPrefix: '/', command: 'serbot'})
+JadiBot({pathJadiBot: botPath, m: null, conn, args: '', usedPrefix: '/', command: 'serbot'})
 }}}}
 
-const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
-const pluginFilter = (filename) => /\.js$/.test(filename)
-global.plugins = {}
-async function filesInit() {
-for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+const comandoFolder = global.__dirname(join(__dirname, './comandos/index() {
+for (const filename of readdirSync(comandoFolder).filter(comandoFilter)) {
 try {
-const file = global.__filename(join(pluginFolder, filename))
+const file = global.__filename(join(comandoFolder, filename))
 const module = await import(file)
 global.comandos[filename] = module.default || module
 } catch (e) {
 conn.logger.error(e)
-delete global.plugins[filename]
+delete global.comandos[filename]
 }}}
 filesInit().then((_) => Object.keys(global.comandos)).catch(console.error)
 
 global.reload = async (_ev, filename) => {
-if (pluginFilter(filename)) {
-const dir = global.__filename(join(pluginFolder, filename), true);
-if (filename in global.plugins) {
-if (existsSync(dir)) conn.logger.info(` updated plugin - '${filename}'`)
+if (comandoFilter(filename)) {
+const dir = global.__filename(join(comandoFolder, filename), true);
+if (filename in global.comandos) {
+if (existsSync(dir)) conn.logger.info(` updated comando - '${filename}'`)
 else {
-conn.logger.warn(`deleted plugin - '${filename}'`)
-return delete global.plugins[filename]
-}} else conn.logger.info(`new plugin - '${filename}'`)
+conn.logger.warn(`deleted comando - '${filename}'`)
+return delete global.comandos[filename]
+}} else conn.logger.info(`new comando - '${filename}'`)
 const err = syntaxerror(readFileSync(dir), filename, {
 sourceType: 'module',
 allowAwaitOutsideFunction: true,
@@ -299,12 +294,12 @@ try {
 const module = (await import(`${global.__filename(dir)}?update=${Date.now()}`));
 global.comandos[filename] = module.default || module;
 } catch (e) {
-conn.logger.error(`error require comando '${filename}\n${format(e)}'`)
+conn.logger.error(`REQUIERE '${filename}\n${format(e)}'`)
 } finally {
 global.comandos = Object.fromEntries(Object.entries(global.comandos).sort(([a], [b]) => a.localeCompare(b)))
 }}}}
 Object.freeze(global.reload)
-watch(pluginFolder, global.reload)
+watch(comandoFolder, global.reload)
 await global.reloadHandler()
 async function _quickTest() {
 const test = await Promise.all([
