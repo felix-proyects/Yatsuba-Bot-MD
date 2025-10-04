@@ -1,23 +1,7 @@
-import { execSync } from 'child_process'
 import fs from 'fs'
-
-// Instala dependencias si no existe node_modules
-if (!fs.existsSync('node_modules')) {
-  console.log('Instalando dependencias desde package.json...')
-  try {
-    execSync('npm install', { stdio: 'inherit' })
-    console.log('✔ Dependencias instaladas correctamente.\n')
-  } catch (e) {
-    console.error('✘ Hubo un error instalando las dependencias:', e)
-    process.exit(1)
-  }
-}
-
-import './yatsuba.js'
 import readline from 'readline'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { conectarPrincipal, conectarSubbot } from './comandos/subs-conexion.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -31,16 +15,13 @@ console.log(`
 ██║     ██║  ██║   ██║   ╚██████╔╝███████╗╚██████╔╝██║  ██║██║  ██║
 ╚═╝     ╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
 
-${global.botname}
-DEV: ${global.texto}
+Yatsuba-Bot-MD
 `)
 
 console.log(`
 Selecciona una opción:
-1. Escribe 'qr' para código QR del BOT principal.
-2. Escribe 'code' para código de 8 dígitos del BOT principal.
-3. Escribe 'subqr' para vincular un SUB-BOT (QR).
-4. Escribe 'subcode' para vincular un SUB-BOT (código de 8 dígitos).
+1. Escribe 'qr' para código QR de subbot.
+2. Escribe 'code' para código de 8 dígitos de subbot.
 `)
 
 const rl = readline.createInterface({
@@ -50,15 +31,37 @@ const rl = readline.createInterface({
 
 rl.on('line', async (input) => {
   input = input.trim().toLowerCase()
-  if (input === 'qr') {
-    await conectarPrincipal({ tipo: 'qr' })
-  } else if (input === 'code') {
-    await conectarPrincipal({ tipo: 'code' })
-  } else if (input === 'subqr') {
-    await conectarSubbot({ tipo: 'qr' })
-  } else if (input === 'subcode') {
-    await conectarSubbot({ tipo: 'code' })
+  if (['qr', 'code'].includes(input)) {
+    try {
+      // Importa el comando correspondiente solo cuando se usa
+      const comando = await import(`./comandos/conexion.js`)
+      // Simula el mensaje y el contexto de la consola
+      const fakeMsg = {
+        chat: 'terminal',
+        sender: 'terminal@whatsapp.net',
+        fromMe: true,
+        body: input,
+        text: input,
+        mentionedJid: [],
+        args: [input]
+      }
+      await comando.default(fakeMsg, {
+        conn: {
+          sendMessage: (chat, obj) => {
+            if (obj.text) console.log('[BOT]', obj.text)
+            if (obj.image) console.log('[BOT] (Imagen QR generada)')
+          },
+          reply: (chat, text) => console.log('[BOT]', text)
+        },
+        args: [input],
+        usedPrefix: '',
+        command: input,
+        isOwner: true
+      })
+    } catch (e) {
+      console.error('Error al ejecutar el comando:', e)
+    }
   } else {
-    console.log('Opción no válida. Usa qr, code, subqr o subcode.')
+    console.log('Opción no válida. Usa qr o code.')
   }
 })
