@@ -1,4 +1,5 @@
 // Código creado por Félix 
+// Si quieres cambiar el nombre a este archivo solo copia todo el contenido, borra el archivo y crea uno nuevo con este contenido y un nuevo nombre.
 
 import apis from './jsons/apis.json' assert { type: 'json' };
 global.apis = apis;
