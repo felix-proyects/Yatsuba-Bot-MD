@@ -1,4 +1,4 @@
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
 
 import readline from 'readline'
 import cfonts from 'cfonts'
@@ -19,7 +19,7 @@ cfonts.say('Bot Desarrollado por Felix', {
   colors: ['blueBright']
 })
 
-console.log(chalk.magentaBright(`CONEXIÓN  CON YATSUBA.
+console.log(chalk.magentaBright(`CONEXIÓN CON YATSUBA.
 
 Este proyecto está desarrollado por Félix ofc y modificado o editado por quien use la base.`))
 
@@ -51,12 +51,13 @@ async function iniciarBotPrincipalQR() {
   const { useMultiFileAuthState, fetchLatestBaileysVersion } = await import('@whiskeysockets/baileys')
   const qrcode = (await import('qrcode')).default
   const pino = (await import('pino')).default
-  const { makeWASocket } = await import('./lib/simple.js')
+  const makeWASocket = (await import('./lib/simple.js')).default
   const SESSION_FOLDER = './Session'
 
   if (!fs.existsSync(SESSION_FOLDER)) fs.mkdirSync(SESSION_FOLDER, { recursive: true })
   const { state, saveCreds } = await useMultiFileAuthState(SESSION_FOLDER)
   const { version } = await fetchLatestBaileysVersion()
+
   const sock = makeWASocket({
     auth: state,
     version,
@@ -64,6 +65,7 @@ async function iniciarBotPrincipalQR() {
     browser: ['Chrome', 'Chrome', '1.0.0'],
     printQRInTerminal: false
   })
+
   sock.ev.on('creds.update', saveCreds)
   sock.ev.on('connection.update', async (update) => {
     if (update.qr) {
@@ -71,12 +73,12 @@ async function iniciarBotPrincipalQR() {
       console.log(await qrcode.toString(update.qr, { type: 'terminal', small: true }))
     }
     if (update.connection === 'open') {
-      console.log(chalk.bold.green('\n¡Bot Perro Hoshino conectado con éxito!'))
+      console.log(chalk.bold.green('\n¡Bot Yatsuba conectado con éxito!'))
       await cargarHandler(sock)
       process.exit(0)
     }
     if (update.connection === 'close') {
-      console.log(chalk.red('\nConexión cerrada. Elimina la carpeta ./PerroSession para reiniciar.'))
+      console.log(chalk.red('\nConexión cerrada. Elimina la carpeta ./Session para reiniciar.'))
       process.exit(1)
     }
   })
@@ -86,7 +88,7 @@ async function iniciarBotPrincipalQR() {
 async function iniciarBotPrincipalCodigo() {
   const { useMultiFileAuthState, fetchLatestBaileysVersion } = await import('@whiskeysockets/baileys')
   const pino = (await import('pino')).default
-  const { makeWASocket } = await import('./lib/simple.js')
+  const makeWASocket = (await import('./lib/simple.js')).default
   const SESSION_FOLDER = './Session'
 
   if (!fs.existsSync(SESSION_FOLDER)) fs.mkdirSync(SESSION_FOLDER, { recursive: true })
@@ -113,7 +115,7 @@ async function iniciarBotPrincipalCodigo() {
       process.exit(0)
     }
     if (update.connection === 'close') {
-      console.log(chalk.red('\nConexión cerrada. Elimina la carpeta ./PerroSession para reiniciar.'))
+      console.log(chalk.red('\nConexión cerrada. Elimina la carpeta ./Session para reiniciar.'))
       process.exit(1)
     }
   })
@@ -124,7 +126,7 @@ async function pedirNumeroTelefono() {
   return await new Promise(resolve => {
     rl.question(chalk.bold.yellow('\n✦ Ingresa tu número de WhatsApp (ej: 573123456789): '), num => {
       num = num.replace(/\D/g, '')
-      if (!num.startsWith('+' && num.length > 8)) num = `+${num}`
+      if (!num.startsWith('+') && num.length > 8) num = `+${num}`
       rl.pause()
       resolve(num)
     })
@@ -133,12 +135,10 @@ async function pedirNumeroTelefono() {
 
 // --- Cargar handler principal ---
 async function cargarHandler(sock) {
-  // Aquí puedes importar tu handler.js y conectar eventos
   try {
     let handler = await import('./manejador.js')
     if (handler.default) handler = handler.default
     sock.ev.on('messages.upsert', handler)
-    // Puedes agregar más eventos aquí
   } catch (e) {
     console.error('Error cargando handler:', e)
   }
