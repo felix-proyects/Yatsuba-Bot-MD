@@ -18,6 +18,7 @@ try {
 // Configuraciones principales 
 
 global.texto = '𝐌ᥲძᥱ 𝐖і𝗍һ ᑲᥡ 𝐃ᥱ᥎ 𝐅ᥱᥣі᥊';
+global.dev = 'Félix ofc';
 global.botname = 'ᥡᥲ𝗍sᥙᑲᥲ ᥒᥲkᥲᥒ᥆';
 global.canal = '120363403383693686@newsletter';
 global.grupo = '120363422151459611@g.us';
