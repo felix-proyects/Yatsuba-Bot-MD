@@ -1,10 +1,10 @@
 // Código creado por Félix 
 // Si quieres cambiar el nombre a este archivo solo copia todo el contenido, borra el archivo y crea uno nuevo con este contenido y un nuevo nombre.
 
-import apis from './jsons/apis.json' assert { type: 'json' };
-global.apis = apis;
+// Configuraciones del creador y las apis
 
 import fs from 'fs'
+import apis from './jsons/apis.json' assert { type: 'json' };
 
 const pathCreador = './jsons/creador.json'
 
@@ -26,7 +26,8 @@ global.grupo = '120363422151459611@g.us';
 global.menu = 'https://files.catbox.moe/tgxh5z.jpg';
 global.logo = 'https://files.catbox.moe/gr48op.jpg';
 global.moneda = 'Coins';
-global.creador = creador
+global.creador = creador;
+global.apis = apis;
 
 // Configuraciones para vincular 
 
