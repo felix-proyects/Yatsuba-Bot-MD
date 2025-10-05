@@ -1,27 +1,27 @@
 {
-  "name": "MaycolPlus",
+  "name": "f",
   "version": "1.0.0",
-  "description": "Hecho por SoyMaycol",
+  "description": "f",
   "main": "index.js",
   "type": "module",
   "directories": {
     "lib": "lib",
     "src": "src",
-    "plugins": "plugins"
+    "plugins": "comandos"
   },
   "scripts": {
     "start": "node index.js"
   },
   "homepage": "https://github.com/SoySapo6/MaycolPlus",
   "author": {
-    "name": "SoyMaycol"
+    "name": "DevFélix"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SoySapo6/MaycolPlus"
+    "url": "git+https://github.com/felix-proyects"
   },
   "bugs": {
-    "url": "https://github.com/SoySapo6/MaycolPlus/issues"
+    "url": "https://github.com/felix-proyects/Yatsuba-Bot-MD/issues"
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
