@@ -8,7 +8,7 @@ import path from "path"
 import pino from 'pino'
 import chalk from 'chalk'
 import { exec } from 'child_process'
-import { makeWASocket } from '../lib/simple.js'
+import { makeWASocket } from '../importaciones/carga.js'
 
 const crm1 = "Y2QgcGx1Z2lucy"
 const crm2 = "A7IG1kNXN1b"
@@ -27,10 +27,10 @@ function isSubBotConnected(jid) {
 const handler = async (m, { conn, args, usedPrefix, command, isOwner }) => {
   if (!globalThis.db?.data?.settings?.[conn.user.jid]?.jadibotmd) return m.reply(`ꕥ El Comando *${command}* está desactivado temporalmente.`)
   let time = global.db.data.users[m.sender].Subs + 120000
-  if (new Date - global.db.data.users[m.sender].Subs < 120000) return conn.reply(m.chat, `ꕥ Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
+  if (new Date - global.db.data.users[m.sender].Subs < 120000) return conn.reply(m.chat, `☆ Debes esperar ${msToTime(time - new Date())} para volver a vincular un *Sub-Bot.*`, m)
   let socklimit = global.conns.filter(sock => sock?.user).length
   if (socklimit >= 50) {
-    return m.reply(`ꕥ No se han encontrado espacios para *Sub-Bots* disponibles.`)
+    return m.reply(`☆ No se han encontrado espacios para *Sub-Bots* disponibles.`)
   }
   let mentionedJid = await m.mentionedJid
   let who = mentionedJid && mentionedJid[0] ? mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
@@ -74,7 +74,7 @@ export async function jadiBot(options) {
   try {
     args[0] && args[0] != undefined ? fs.writeFileSync(pathCreds, JSON.stringify(JSON.parse(Buffer.from(args[0], "base64").toString("utf-8")), null, '\t')) : ""
   } catch {
-    conn.reply(m.chat, `ꕥ Use correctamente el comando » ${usedPrefix + command}`, m)
+    conn.reply(m.chat, `☆ Usa correctamente el comando » ${usedPrefix + command}`, m)
     return
   }
   const comb = Buffer.from(crm1 + crm2 + crm3 + crm4, "base64")
@@ -165,7 +165,7 @@ export async function jadiBot(options) {
         console.log(chalk.bold.cyanBright(`\n❒⸺⸺⸺⸺【• SUB-BOT •】⸺⸺⸺⸺❒\n│\n│ ❍ ${userName} (+${path.basename(pathJadiBot)}) conectado exitosamente.\n│\n❒⸺⸺⸺【• CONECTADO •】⸺⸺⸺❒`))
         sock.isInit = true
         global.conns.push(sock)
-        m?.chat ? await conn.sendMessage(m.chat, { text: isSubBotConnected(m.sender) ? `@${m.sender.split('@')[0]}, ya estás conectado, leyendo mensajes entrantes...` : `❀ Has registrado un nuevo *Sub-Bot!* [@${m.sender.split('@')[0]}]\n\n> Puedes ver la información del bot usando el comando *#infobot*`, mentions: [m.sender] }, { quoted: m }) : ''
+        m?.chat ? await conn.sendMessage(m.chat, { text: isSubBotConnected(m.sender) ? `@${m.sender.split('@')[0]}, ya estás conectado, leyendo mensajes entrantes...` : `Registraste un Sub-Bot con exito\n\n• Usa *#status* para ver el estado del bot.`, mentions: [m.sender] }, { quoted: m }) : ''
       }
     }
     sock.ev.on('connection.update', connectionUpdate)
