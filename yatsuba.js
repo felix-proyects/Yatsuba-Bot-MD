@@ -3,10 +3,7 @@
 import fs from 'fs'
 import chalk from "chalk"
 
-global.creador = [
-  "18293478038",
-  "18293478038"
-];
+// Configuraciones principales 
 
 global.texto = '𝐌ᥲძᥱ 𝐖і𝗍һ ᑲᥡ 𝐃ᥱ᥎ 𝐅ᥱᥣі᥊ 𝐃𝐞𝐯𝐅𝐞́𝐥𝐢𝐱';
 global.botname = 'ᥡᥲ𝗍sᥙᑲᥲ ᥒᥲkᥲᥒ᥆';
@@ -16,8 +13,12 @@ global.menu = 'https://files.catbox.moe/tgxh5z.jpg';
 global.logo = 'https://files.catbox.moe/gr48op.jpg';
 global.moneda = 'Coins';
 
+// Apis para el bot 
+
 import apis from './jsons/apis.json' assert { type: 'json' };
 global.apis = apis;
+
+// Ruta para saber quien es el creador
 
 // Configuraciones para vincular 
 
