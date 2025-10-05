@@ -1,5 +1,3 @@
-// Archivo index.js simplificado y adaptable para Perro Hoshino Bot
-
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 
 import readline from 'readline'
@@ -10,12 +8,12 @@ import path from 'path'
 
 // --- Mensajes de bienvenida ---
 console.clear()
-cfonts.say('Perro-Bot', {
+cfonts.say('${botname}', {
   font: 'chrome',
   align: 'center',
   gradient: ['#ff4fcb', '#ff77ff'],
 })
-cfonts.say('Desarroll', {
+cfonts.say('Bot Desarrollado por ${dev}', {
   font: 'console',
   align: 'center',
   colors: ['blueBright']
