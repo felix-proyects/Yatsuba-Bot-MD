@@ -27,6 +27,7 @@ global.menu = 'https://files.catbox.moe/tgxh5z.jpg';
 global.logo = 'https://files.catbox.moe/gr48op.jpg';
 global.moneda = 'Coins';
 global.creador = creador
+
 // Configuraciones para vincular 
 
 global.sessions = "Session"           // Carpeta de sesión principal del bot
