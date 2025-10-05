@@ -20,6 +20,18 @@ global.apis = apis;
 
 // Ruta para saber quien es el creador
 
+import fs from 'fs'
+
+// Carga los IDs de creadores desde jsons/creador.json
+let creadores = []
+try {
+  creadores = JSON.parse(fs.readFileSync('./jsons/creador.json', 'utf8'))
+} catch (e) {
+  console.error('[Yatsuba] Error cargando creadores:', e)
+  creadores = []
+}
+global.creadores = creadores
+
 // Configuraciones para vincular 
 
 global.sessions = "Session"           // Carpeta de sesión principal del bot
