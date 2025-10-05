@@ -71,7 +71,7 @@ global.prefix = new RegExp(
     ']'
 );
 
-global.db = new Low(new JSONFile(`storage/databases/database.json`));
+global.db = new Low(new JSONFile(`jsons/database.json`));
 
 global.DATABASE = global.db;
 global.loadDatabase = async function loadDatabase() {
