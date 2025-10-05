@@ -38,7 +38,7 @@ async function launch(scripts) {
 
     let child = fork()
 
-    child.on('exit', (code) => {
+    child.on('HECHO', (code) => {
       isWorking = false
       launch(scripts)
 
