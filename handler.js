@@ -115,8 +115,8 @@ export async function handler(chatUpdate) {
         // const isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || _user.prem == true
 
         // Ahora:
-        const isROwner = [conn.decodeJid(global.conn.user.id), ...global.rowner.map(([number]) => number)].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
-        const isSubBot = global.subbot && global.subbot.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+        const isROwner = [conn.decodeJid(global.conn.user.id), ...(global.rowner || []).map(([number]) => number)].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+        const isSubBot = (global.subbot || []).map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         // NOTA: Si subbot es un array de números
         // const isOwner = isROwner || isSubBot || m.fromMe
 
