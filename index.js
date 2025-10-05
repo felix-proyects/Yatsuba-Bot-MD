@@ -1,145 +1,54 @@
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+console.log('Yatsuba MD')
 
-import readline from 'readline'
+import { join, dirname } from 'path'
+import { createRequire } from 'module'
+import { fileURLToPath } from 'url'
+import { setupMaster, fork } from 'cluster'
+import { watchFile, unwatchFile } from 'fs'
 import cfonts from 'cfonts'
-import chalk from 'chalk'
-import fs from 'fs'
-import path from 'path'
 
-// --- Mensajes de bienvenida ---
-console.clear()
-cfonts.say('Yatsuba MD', {
-  font: 'chrome',
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const require = createRequire(__dirname)
+
+cfonts.say('Yatsuba\nPowered by DevFélix', {
+  font: 'block',
   align: 'center',
-  gradient: ['#ff4fcb', '#ff77ff'],
+  gradient: ['cyan', 'blue']
 })
-cfonts.say('Bot Desarrollado por Felix', {
-  font: 'console',
+
+cfonts.say('BOT DESARROLLADO POR FÉLIX', {
+  font: 'simple',
   align: 'center',
-  colors: ['blueBright']
+  gradient: ['blue', 'white']
 })
 
-console.log(chalk.magentaBright(`CONEXIÓN CON YATSUBA.
+let isWorking = false
 
-Este proyecto está desarrollado por Félix ofc y modificado o editado por quien use la base.`))
+async function launch(scripts) {
+  if (isWorking) return
+  isWorking = true
 
-console.log(chalk.white(`
-Selecciona una opción para vincular el bot:
-1. Escribe 'qr' para vincular por código QR.
-2. Escribe 'code' para vincular por código de 8 dígitos.
-`))
+  for (const script of scripts) {
+    const args = [join(__dirname, script), ...process.argv.slice(2)]
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
-// --- Menú ---
-rl.on('line', async (input) => {
-  input = input.trim().toLowerCase()
-  if (input === 'qr') {
-    await iniciarBotPrincipalQR()
-  } else if (input === 'code') {
-    await iniciarBotPrincipalCodigo()
-  } else {
-    console.log(chalk.red('Opción inválida. Escribe "qr" o "code".'))
-  }
-})
-
-// --- Función para iniciar por QR ---
-async function iniciarBotPrincipalQR() {
-  const { useMultiFileAuthState, fetchLatestBaileysVersion } = await import('@whiskeysockets/baileys')
-  const qrcode = (await import('qrcode')).default
-  const pino = (await import('pino')).default
-  const makeWASocket = (await import('./lib/simple.js')).default
-  const SESSION_FOLDER = './Session'
-
-  if (!fs.existsSync(SESSION_FOLDER)) fs.mkdirSync(SESSION_FOLDER, { recursive: true })
-  const { state, saveCreds } = await useMultiFileAuthState(SESSION_FOLDER)
-  const { version } = await fetchLatestBaileysVersion()
-
-  const sock = makeWASocket({
-    auth: state,
-    version,
-    logger: pino({ level: "fatal" }),
-    browser: ['Chrome', 'Chrome', '1.0.0'],
-    printQRInTerminal: false
-  })
-
-  sock.ev.on('creds.update', saveCreds)
-  sock.ev.on('connection.update', async (update) => {
-    if (update.qr) {
-      console.log(chalk.bold.cyan('\nEscanea este QR en WhatsApp para vincular tu bot:'))
-      console.log(await qrcode.toString(update.qr, { type: 'terminal', small: true }))
-    }
-    if (update.connection === 'open') {
-      console.log(chalk.bold.green('\n¡Bot Yatsuba conectado con éxito!'))
-      await cargarHandler(sock)
-      process.exit(0)
-    }
-    if (update.connection === 'close') {
-      console.log(chalk.red('\nConexión cerrada. Elimina la carpeta ./Session para reiniciar.'))
-      process.exit(1)
-    }
-  })
-}
-
-// --- Función para iniciar por número/código de 8 dígitos ---
-async function iniciarBotPrincipalCodigo() {
-  const { useMultiFileAuthState, fetchLatestBaileysVersion } = await import('@whiskeysockets/baileys')
-  const pino = (await import('pino')).default
-  const makeWASocket = (await import('./lib/simple.js')).default
-  const SESSION_FOLDER = './Session'
-
-  if (!fs.existsSync(SESSION_FOLDER)) fs.mkdirSync(SESSION_FOLDER, { recursive: true })
-  const { state, saveCreds } = await useMultiFileAuthState(SESSION_FOLDER)
-  const { version } = await fetchLatestBaileysVersion()
-  const sock = makeWASocket({
-    auth: state,
-    version,
-    logger: pino({ level: "fatal" }),
-    browser: ['Chrome', 'Chrome', '1.0.0'],
-    printQRInTerminal: false
-  })
-  sock.ev.on('creds.update', saveCreds)
-  sock.ev.on('connection.update', async (update) => {
-    if (typeof sock.requestPairingCode === "function") {
-      let telefono = await pedirNumeroTelefono()
-      let code = await sock.requestPairingCode(telefono)
-      code = code.match(/.{1,4}/g)?.join("-")
-      console.log(chalk.bold.magenta('\nCódigo de vinculación:'), chalk.bold.white(code))
-    }
-    if (update.connection === 'open') {
-      console.log(chalk.bold.green('\nEXITO EN LA CONEXIÓN'))
-      await cargarHandler(sock)
-      process.exit(0)
-    }
-    if (update.connection === 'close') {
-      console.log(chalk.red('\nConexión cerrada. Elimina la carpeta ./Session para reiniciar.'))
-      process.exit(1)
-    }
-  })
-}
-
-// --- Pedir número de teléfono ---
-async function pedirNumeroTelefono() {
-  return await new Promise(resolve => {
-    rl.question(chalk.bold.yellow('\n✦ Ingresa tu número de WhatsApp (ej: 573123456789): '), num => {
-      num = num.replace(/\D/g, '')
-      if (!num.startsWith('+') && num.length > 8) num = `+${num}`
-      rl.pause()
-      resolve(num)
+    setupMaster({
+      exec: args[0],
+      args: args.slice(1),
     })
-  })
-}
 
-// --- Cargar handler principal ---
-async function cargarHandler(sock) {
-  try {
-    let handler = await import('./manejador.js')
-    if (handler.default) handler = handler.default
-    sock.ev.on('messages.upsert', handler)
-  } catch (e) {
-    console.error('Error cargando handler:', e)
+    let child = fork()
+
+    child.on('exit', (code) => {
+      isWorking = false
+      launch(scripts)
+
+      if (code === 0) return
+      watchFile(args[0], () => {
+        unwatchFile(args[0])
+        launch(scripts)
+      })
+    })
   }
 }
+
+launch(['ins.js'])
