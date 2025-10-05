@@ -14,7 +14,7 @@ import { tmpdir } from 'os';
 import { format } from 'util';
 import pino from 'pino';
 import { Boom } from '@hapi/boom';
-import { makeWASocket, protoType, serialize } from './importaciones/carga.js';
+import { makeWASocket, protoType, serialize } from './carga.js';
 import { Low, JSONFile } from 'lowdb';
 import lodash from 'lodash';
 import readline from 'readline';
