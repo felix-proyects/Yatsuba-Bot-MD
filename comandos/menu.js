@@ -1,11 +1,12 @@
 const handler = async (m, { conn }) => {
   const nombre = '@' + (m.sender?.split('@')[0] || 'usuario');
-  const texto = `Hola ${nombre} soy ${global.botname}
-Aquí tienes la lista de comandos:
+  const texto = `Hola ${nombre} soy ${global.botname} 
 
-( aquí pondré los comandos )
+Subbots:
+• #code
+• #qr
 
-Recuerda usar el prefijo del bot para cada comando.`;
+> ${global.texto}`;
 
   await conn.sendMessage(
     m.chat,
