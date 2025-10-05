@@ -1,5 +1,7 @@
 // Código creado por Félix 
 
+import fs from 'fs'
+
 global.creador = [
   "18293478038",
   "18293478038"
