@@ -51,4 +51,4 @@ async function launch(scripts) {
   }
 }
 
-launch(['simple.js'])
+launch(['ins.js'])
