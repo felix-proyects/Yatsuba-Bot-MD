@@ -8,20 +8,20 @@ import path from 'path'
 
 // --- Mensajes de bienvenida ---
 console.clear()
-cfonts.say('${botname}', {
+cfonts.say('Yatsuba MD', {
   font: 'chrome',
   align: 'center',
   gradient: ['#ff4fcb', '#ff77ff'],
 })
-cfonts.say('Bot Desarrollado por ${dev}', {
+cfonts.say('Bot Desarrollado por Felix', {
   font: 'console',
   align: 'center',
   colors: ['blueBright']
 })
 
-console.log(chalk.magentaBright(`CONEXIÓN  CON ${botname}.
+console.log(chalk.magentaBright(`CONEXIÓN  CON YATSUBA.
 
-Este proyecto está desarrollado por Félix ofc y modificado o editado por ${dev}.`))
+Este proyecto está desarrollado por Félix ofc y modificado o editado por quien use la base.`))
 
 console.log(chalk.white(`
 Selecciona una opción para vincular el bot:
