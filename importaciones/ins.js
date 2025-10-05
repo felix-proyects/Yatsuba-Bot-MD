@@ -1,6 +1,5 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1';
 
-import './config.js';
 import { createRequire } from 'module';
 import path, { join } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
@@ -9,6 +8,7 @@ import * as ws from 'ws';
 import { readdirSync, statSync, unlinkSync, existsSync, readFileSync, watch, mkdirSync } from 'fs';
 import yargs from 'yargs';
 import chalk from 'chalk';
+import './yatsuba.js';
 import syntaxerror from 'syntax-error';
 import { tmpdir } from 'os';
 import { format } from 'util';
