@@ -51,4 +51,4 @@ async function launch(scripts) {
   }
 }
 
-launch(['main.js'])
+launch(['./main.js'])
