@@ -417,16 +417,16 @@ global.reloadHandler = async function (restartConn) {
   return true;
 };
 
-const pluginFolder = global.__dirname(join(__dirname, './plugins/index'));
-const pluginFilter = (filename) => /\.js$/.test(filename);
+const pluginFolder = global.__dirname(join(__dirname, './comandos/index'));
+const comandosFilter = (filename) => /\.js$/.test(filename);
 global.plugins = {};
 
 async function filesInit() {
-  for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+  for (const filename of readdirSync(comandosFolder).filter(comandosFilter)) {
     try {
       const file = global.__filename(join(pluginFolder, filename));
       const module = await import(file);
-      global.plugins[filename] = module.default || module;
+      global.comandos[filename] = module.default || module;
     } catch (e) {
       conn.logger.error(e);
       delete global.comandos[filename];
@@ -438,11 +438,11 @@ await filesInit();
 global.reload = async (_ev, filename) => {
   if (pluginFilter(filename)) {
     const dir = global.__filename(join(pluginFolder, filename), true);
-    if (filename in global.plugins) {
+    if (filename in global.comandos) {
       if (existsSync(dir)) conn.logger.info(`Actualización de comando - '${filename}'`);
       else {
         conn.logger.warn(`Comando eliminado - '${filename}'`);
-        return delete global.plugins[filename];
+        return delete global.comandos[filename];
       }
     } else conn.logger.info(`Nuevo Comando - '${filename}'`);
 
@@ -450,15 +450,15 @@ global.reload = async (_ev, filename) => {
       sourceType: 'module',
       allowAwaitOutsideFunction: true,
     });
-    if (err) conn.logger.error(`Syntax error while loading '${filename}':\n${format(err)}`);
+    if (err) conn.logger.error(`ERROR DE SÍNTAX'${filename}':\n${format(err)}`);
     else {
       try {
         const module = await import(`${global.__filename(dir)}?update=${Date.now()}`);
-        global.plugins[filename] = module.default || module;
+        global.comandos[filename] = module.default || module;
       } catch (e) {
         conn.logger.error(`Error requiring plugin '${filename}':\n${format(e)}`);
       } finally {
-        global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b)));
+        global.comandos = Object.fromEntries(Object.entries(global.comandos).sort(([a], [b]) => a.localeCompare(b)));
       }
     }
   }
