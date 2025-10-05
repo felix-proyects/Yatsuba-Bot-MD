@@ -1,6 +1,7 @@
 // Código creado por Félix 
 
 import fs from 'fs'
+import chalk from "chalk"
 
 global.creador = [
   "18293478038",
@@ -26,5 +27,6 @@ global.Jadibots = true
 
 // Configuración final 
 
-global.update = 'yatsuba.js';
-global.tipo = 'Bot Principal';
+console.log(chalk.redBright("Update 'yatsuba.js'"))
+import(`${file}?update=${Date.now()}`)
+})
