@@ -34,9 +34,3 @@ global.apis = apis;
 global.sessions = "Session"           // Carpeta de sesión principal del bot
 global.jadi = "JadiBots"              // Carpeta para almacenar las sesiones de subbots
 global.Jadibots = true
-
-// Configuración final 
-
-console.log(chalk.redBright("Update 'yatsuba.js'"))
-import(`${file}?update=${Date.now()}`)
-})
