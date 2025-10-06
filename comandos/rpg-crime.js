@@ -1,59 +1,49 @@
-// Dependencias necesarias
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
 
-// Ruta del archivo JSON
-const crimePath = path.join(__dirname, 'jsons/rpg/crime.json');
+const CRIME_PATH = './jsons/rpg/crime.json';
+const COOLDOWN = 5 * 60 * 1000; // 5 minutos
 
-// Mapa para gestión de cooldowns
-const cooldowns = {};
+let handler = async (m, { conn, usedPrefix, command }) => {
+  // Solo en grupos
+  if (!m.isGroup) return conn.reply(m.chat, 'Este comando solo puede usarse en grupos.', m);
 
-// Función utilitaria para cooldown por usuario/grupo
-function canRunCrimeCommand(sender, groupId) {
-    const key = `${sender}:${groupId}`;
-    const now = Date.now();
-    if (cooldowns[key] && now - cooldowns[key] < 5 * 60 * 1000) {
-        return false;
-    }
-    cooldowns[key] = now;
-    return true;
+  let user = global.db.data.users[m.sender];
+  user.lastCrime = user.lastCrime || 0;
+  user.coin = user.coin || 0;
+
+  const now = Date.now();
+  if (now < user.lastCrime) {
+    const wait = formatTime(user.lastCrime - now);
+    return conn.reply(m.chat, `🧡 Debes esperar *${wait}* para usar *${usedPrefix + command}* de nuevo.`, m, fake);
+  }
+
+  // Leer frases desde el JSON externo
+  let crimes = [];
+  try {
+    crimes = JSON.parse(fs.readFileSync(CRIME_PATH));
+  } catch {
+    return conn.reply(m.chat, '🧡 Error al cargar las frases de crimen.', m, fake);
+  }
+
+  // Elegir crimen aleatorio
+  const picked = crimes[Math.floor(Math.random() * crimes.length)];
+
+  // Actualizar monedas y cooldown
+  user.coin += picked.cantidad;
+  user.lastCrime = now + COOLDOWN;
+
+  // Mensaje de resultado
+  await conn.reply(m.chat, `🧡 ${picked.frase}, obtuviste *${picked.cantidad.toLocaleString()}* monedas.`, m, fake);
+};
+
+handler.command = ['crimen', 'crime'];
+handler.group = true;
+export default handler;
+
+// Utilidad para formato de tiempo
+function formatTime(ms) {
+  let totalSec = Math.ceil(ms / 1000);
+  let min = Math.floor(totalSec / 60);
+  let sec = totalSec % 60;
+  return `${min ? min + 'm ' : ''}${sec}s`;
 }
-
-// Evento de mensajes (ajusta según tu estructura)
-conn.ev.on('messages.upsert', async ({ messages }) => {
-    let m = messages[0];
-    if (!m.message) return;
-    // Solo aceptar mensajes en grupo
-    if (!m.key.remoteJid.endsWith('@g.us')) return;
-
-    // Texto recibido
-    const text = m.message.conversation || m.message.extendedTextMessage?.text || "";
-
-    // Regex para detectar el comando
-    if (/^#crime(n)?$/i.test(text.trim())) {
-        const sender = m.key.participant || m.key.remoteJid; // Ajusta según tu sistema
-        const groupId = m.key.remoteJid;
-
-        // Cooldown de 5 minutos por usuario por grupo
-        if (!canRunCrimeCommand(sender, groupId)) {
-            await conn.sendMessage(groupId, { text: "⏳ Debes esperar 5 minutos antes de volver a usar este comando." }, { quoted: m });
-            return;
-        }
-
-        // Leer frases del JSON
-        let crimes = [];
-        try {
-            crimes = JSON.parse(fs.readFileSync(crimePath, 'utf8'));
-        } catch (e) {
-            await conn.sendMessage(groupId, { text: "❌ Error al leer las frases de crimen." }, { quoted: m });
-            return;
-        }
-
-        // Elegir frase al azar
-        const crime = crimes[Math.floor(Math.random() * crimes.length)];
-
-        // Enviar mensaje
-        const msg = `${crime.frase}, obtuviste ${crime.cantidad}`;
-        await conn.sendMessage(groupId, { text: msg }, { quoted: m });
-    }
-});
