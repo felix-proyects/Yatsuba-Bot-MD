@@ -1,3 +1,5 @@
+// Código creado por Félix OFC
+
 let handler = async (m, { conn, isAdmin }) => {
   // Solo admins pueden usarlo
   if (!isAdmin) {
