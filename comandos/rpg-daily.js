@@ -1,6 +1,7 @@
 // Codigo Creado por Félix ofc
 
 import fs from 'fs';
+import './yatsuba.js';
 
 const DAILY_PATH = './jsons/rpg/daily.json';
 
@@ -43,7 +44,7 @@ const handler = async (m, { conn }) => {
   const timeLeft = lastClaim + cooldown - now;
 
   if (timeLeft > 0) {
-    await conn.sendMessage(m.chat, { text: `💛 Debes esperar *${msToTime(timeLeft)}* para volver a reclamar tu recompensa diaria.` }, { quoted: m });
+    await conn.sendMessage(m.chat, { text: `${global.emoji} Debes esperar *${msToTime(timeLeft)}* para volver a reclamar tu recompensa diaria.` }, { quoted: m });
     return;
   }
 
@@ -60,7 +61,7 @@ const handler = async (m, { conn }) => {
   // Responde al usuario
   await conn.sendMessage(
     m.chat,
-    { text: `💛 Reclamaste tu recompensa diaria de *${cantidad.toLocaleString()}* ${moneda}` },
+    { text: `${global.emoji} Reclamaste tu recompensa diaria de *${cantidad.toLocaleString()}* ${moneda}` },
     { quoted: m }
   );
 };
