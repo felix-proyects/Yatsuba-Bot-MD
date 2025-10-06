@@ -1,25 +1,11 @@
-// Código creado por Félix.
+// Código creado por Félix ofc 
+// Respeta créditos
 
 import ws from 'ws'
 import { join } from 'path'
 import fs from 'fs'
 
 let handler = async (m, { conn }) => {
-  // Verificación de créditos
-  const creditos = "// Código creado por Félix."
-  // Lee el archivo actual (suponiendo que el archivo se llama igual que el comando, adáptalo si lo renombras)
-  const ruta = __filename || new URL('', import.meta.url).pathname
-  let codigoFuente = ""
-  try {
-    codigoFuente = fs.readFileSync(ruta, 'utf-8')
-  } catch {}
-  if (!codigoFuente.includes(creditos)) {
-    let spam = "TE MANDE A DEJAR CREDITOS\n".repeat(16)
-    await conn.sendMessage(m.chat, { text: spam }, { quoted: m })
-    return
-  }
-
-  // Lógica principal
   const mainBotConn = global.conn
   if (!global.conns || !Array.isArray(global.conns)) global.conns = []
   global.conns = global.conns.filter(subConn => {
@@ -58,7 +44,7 @@ let handler = async (m, { conn }) => {
   if (botsEnGrupo > 0) {
     for (let b of botsEnGrupoDetalles) {
       const numero = b.jid.split('@')[0]
-      txt += `\t\t• [${b.tipo}] » @${numero}\n`
+      txt += `\t\t• [${b.tipo} ${botname}] » @${numero}\n`
     }
   } else {
     txt += '\t\t🜸 Ningún bot principal/sub en este grupo\n'
