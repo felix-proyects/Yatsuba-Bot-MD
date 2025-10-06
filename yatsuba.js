@@ -21,13 +21,14 @@ try {
 global.texto = '𝐌ᥲძᥱ 𝐖і𝗍һ ᑲᥡ 𝐃ᥱ᥎ 𝐅ᥱᥣі᥊';
 global.dev = 'Félix ofc';
 global.botname = 'ᥡᥲ𝗍sᥙᑲᥲ ᥒᥲkᥲᥒ᥆';
+global.canalname = 'Yatsuba Nakano';
 global.canal = '120363403383693686@newsletter';
 global.grupo = '120363422151459611@g.us';
 global.menu = 'https://files.catbox.moe/tgxh5z.jpg';
 global.logo = 'https://files.catbox.moe/gr48op.jpg';
 global.moneda = 'Coins';
 global.emoji = '✿';
-global.creador = creador
+global.creador = creador;
 global.apis = apis;
 
 // Configuraciones para vincular 
