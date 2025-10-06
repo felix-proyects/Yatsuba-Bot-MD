@@ -1,3 +1,5 @@
+// Código creado por Félix OFC 
+
 import fs from 'fs';
 
 const CRIME_PATH = './jsons/rpg/crime.json';
@@ -5,7 +7,7 @@ const COOLDOWN = 5 * 60 * 1000; // 5 minutos
 
 let handler = async (m, { conn, usedPrefix, command }) => {
   // Solo en grupos
-  if (!m.isGroup) return conn.reply(m.chat, 'Este comando solo puede usarse en grupos.', m);
+  if (!m.isGroup) return conn.reply(m.chat, '${emoji} Este comando solo puede usarse en grupos.', m);
 
   let user = global.db.data.users[m.sender];
   user.lastCrime = user.lastCrime || 0;
@@ -22,7 +24,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   try {
     crimes = JSON.parse(fs.readFileSync(CRIME_PATH));
   } catch {
-    return conn.reply(m.chat, '🧡 Error al cargar las frases de crimen.', m);
+    return conn.reply(m.chat, '${emoji} Error al cargar las frases de crimen.', m);
   }
 
   // Elegir crimen aleatorio
@@ -33,7 +35,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   user.lastCrime = now + COOLDOWN;
 
   // Mensaje de resultado
-  await conn.reply(m.chat, `🧡 ${picked.frase}, obtuviste *${picked.cantidad.toLocaleString()}* monedas.`, m);
+  await conn.reply(m.chat, `${emoji} ${picked.frase}, obtuviste *${picked.cantidad.toLocaleString()}* monedas.`, m);
 };
 
 handler.command = ['crimen', 'crime'];
