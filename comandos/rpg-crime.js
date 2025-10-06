@@ -1,3 +1,5 @@
+// Codigo Creado por Félix ofc
+
 import fs from 'fs';
 import './yatsuba.js';
 
@@ -21,4 +23,5 @@ const handler = async (m, { isGroup, sender, chat }) => {
 };
 
 handler.command = ['crime'];
+
 export default handler;
