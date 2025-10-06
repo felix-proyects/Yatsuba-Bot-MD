@@ -1,16 +1,20 @@
-import comandos from '../jsons/comandos.json' assert { type: 'json' }; 
+// Código creado por Félix OFC 
 
-const handler = async (conn, m, prefijo, comando) => {
+import fs from 'fs'
+
+// Carga los comandos válidos desde el archivo JSON como objeto
+const comandos = JSON.parse(fs.readFileSync('./jsons/comandos.json'))
+
+export async function before(m, { conn, usedPrefix }) {
+  if (!m.text) return
+  if (!m.text.startsWith(usedPrefix)) return
+
+  // Extrae el comando sin prefijo ni argumentos
+  const comando = m.text.slice(usedPrefix.length).split(/\s/)[0].toLowerCase()
+
+  // Si el comando NO está en el objeto comandos, advierte
   if (!comandos[comando]) {
-    const emoji = global.emoji || '❌';
-    const texto = `${emoji} El comando [${prefijo}${comando}] no existe.\nPara ver la lista de comandos usa:\n> #help`;
-    await conn.sendMessage(m.chat, { text: texto }, { quoted: m });
-    if (typeof conn.sendMessage === "function") {
-      await conn.sendMessage(m.chat, { react: { text: emoji, key: m.key } });
-    }
-    return true;
+    await conn.reply(m.chat, `${emoji} El comando *${usedPrefix}${comando}* no existe o está deshabilitado.`, m)
+    return !0
   }
-  return false;
-};
-
-export default handler;
+}
