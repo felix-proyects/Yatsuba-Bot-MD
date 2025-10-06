@@ -26,7 +26,7 @@ global.grupo = '120363422151459611@g.us';
 global.menu = 'https://files.catbox.moe/tgxh5z.jpg';
 global.logo = 'https://files.catbox.moe/gr48op.jpg';
 global.moneda = 'Coins';
-global.emoji = '💛';
+global.emoji = '✿';
 global.creador = creador
 global.apis = apis;
 
