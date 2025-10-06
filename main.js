@@ -217,14 +217,14 @@ async function handleLogin() {
 
   let loginMethod = await question(
     chalk.green(
-      '¿Cómo deseas iniciar sesión?\nEscribe "qr" para escanear el código QR o "code" para usar un código de 8 dígitos:\n'
+      '╭━━━━━━━━━━━━━╮\n┃1- Escribe (qr) para código qr\n┃2- Escribe (code) para codigo de dígitos\n╰━━━━━━━━━━━━━\n'
     )
   );
 
   loginMethod = loginMethod.toLowerCase().trim();
 
   if (loginMethod === 'code') {
-    let phoneNumber = await question(chalk.blue('Ingresa el número de WhatsApp donde estará el bot (incluye código país, ej: 521XXXXXXXXXX):\n'));
+    let phoneNumber = await question(chalk.blue('3- Escribe el número para vincular junto al prefijo\n'));
     phoneNumber = phoneNumber.replace(/\D/g, ''); // Solo números
 
     // Ajustes básicos para México (52)
