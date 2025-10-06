@@ -1,7 +1,6 @@
 // Codigo Creado por Félix ofc
 
 import fs from 'fs';
-import './yatsuba.js';
 
 const cooldown = 5 * 60 * 1000; // 5 minutos
 const used = {};
