@@ -22,6 +22,5 @@ const handler = async (m, { isGroup, sender, chat }) => {
   m.reply(`${global.emoji} ${pick.frase}, obtuviste ${pick.cantidad} ${global.moneda}`);
 };
 
-handler.command = ['crime'];
-
+handler.command = /^([#.])(crime|crimen)$/i;
 export default handler;
