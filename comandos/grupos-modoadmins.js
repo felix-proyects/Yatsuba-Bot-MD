@@ -36,8 +36,8 @@ let handler = async (m, { conn, args, isAdmin, isBotAdmin, groupMetadata }) => {
   // Opciones inválidas
   return m.reply(
     `🜸 Puedes activar o desactivar este modo usando:\n\n` +
-    `✰ Opcion: on » para activar.\n` +
-    `✰ Opcion: off » para desactivar.`
+    `✰ on » para activar.\n` +
+    `✰ off » para desactivar.`
   , m)
 }
 
