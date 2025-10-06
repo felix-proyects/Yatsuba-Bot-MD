@@ -95,7 +95,7 @@ let handler = async (m, { conn, args, command, usedPrefix }) => {
     if (m.quoted) uid = m.quoted.sender
     if (m.mentionedJid && m.mentionedJid.length) uid = m.mentionedJid[0]
     const harem = getUserHarem(uid)
-    if (!harem.length) return m.reply('*🜸 No tienes personajes en tu harem.', m)
+    if (!harem.length) return m.reply('*🜸 No tienes personajes en tu harem.*', m)
     let txt = `*Harem de @${uid.split('@')[0]}*\n`
     harem.forEach(p => txt += `• ${p.nombre} (ID: ${p.id})\n`)
     return m.reply(txt, m, { mentions: [uid] })
@@ -105,7 +105,7 @@ let handler = async (m, { conn, args, command, usedPrefix }) => {
   if (/^(haremshop|wshop)$/i.test(command)) {
     const gacha = loadGacha()
     const ventas = gacha.filter(p => typeof p.venta === 'number' && p.venta > 0)
-    if (!ventas.length) return m.reply(*'🜸 No hay personajes en venta.*', m)
+    if (!ventas.length) return m.reply('*🜸 No hay personajes en venta.*', m)
     let txt = '*🜸 Personajes en venta:*\n'
     ventas.forEach(p => txt += `• ${p.nombre} (ID: ${p.id}) — ${p.venta} coins [Vendedor: @${p.estado.split('@')[0]}]\n`)
     return m.reply(txt, m, { mentions: ventas.map(p => p.estado) })
