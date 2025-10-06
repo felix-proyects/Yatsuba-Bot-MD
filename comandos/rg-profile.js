@@ -50,7 +50,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 
   // Mensaje a enviar
   const mensaje = `
-❖ Usuario » @${username}
+❖ Usuario » *@${username}*
 ✰ ${moneda} » *${totalMonedas}*
 ✰ Bot » *${botname}*
 
