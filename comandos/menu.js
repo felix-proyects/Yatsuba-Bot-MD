@@ -6,6 +6,10 @@ Subbots:
 • #code
 • #qr
 
+RPG:
+
+• #daily
+
 > ${global.texto}`;
 
   await conn.sendMessage(
