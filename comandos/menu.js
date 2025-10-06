@@ -1,6 +1,6 @@
 const handler = async (m, { conn }) => {
   const nombre = '@' + (m.sender?.split('@')[0] || 'usuario');
-  const texto = `𝐇𝐨𝐥𝐚! *${nombre},* soy $*{global.botname}.*
+  const texto = `𝐇𝐨𝐥𝐚! *${nombre},* soy *${global.botname}*
 
 
 ╭⬣「 ✰ 𝐈𝐧𝐟𝐨-𝐁𝐨𝐭 ✰ 」⬣
