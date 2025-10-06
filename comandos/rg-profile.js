@@ -3,68 +3,63 @@
 // Sistema para ver tu perfil (#profile)
 // Puedes usar esta base o código pero respeta créditos porque solo yo se todo el esfuerzo que ago creando códigos va?
 
-import fs from 'fs'
-import path from 'path'
 
-let handler = async (m, { conn, usedPrefix, command }) => {
-  // Obtén el usuario que ejecutó el comando
-  const usuario = m.sender
-  const username = usuario.split('@')[0]
+import fetch from 'node-fetch'
 
-  // Carga la configuración de moneda
-  let moneda = global.config?.moneda || 'Coins'
-
-  // Ruta de los archivos de monedas
-  const dailyPath = path.join(process.cwd(), 'comandos', 'rpg-daily.js')
-  const crimePath = path.join(process.cwd(), 'comandos', 'rpg-crime.js')
-
-  // Función para obtener monedas de un archivo
-  const getMonedas = (filePath) => {
-    if (!fs.existsSync(filePath)) return 0
-    try {
-      const data = require(filePath)
-      return (typeof data === 'object' && data[usuario]) ? Number(data[usuario]) : 0
-    } catch (e) {
-      return 0
-    }
-  }
-
-  // Suma total de monedas
-  const monedasDaily = getMonedas(dailyPath)
-  const monedasCrime = getMonedas(crimePath)
-  const totalMonedas = monedasDaily + monedasCrime
-
-  // Obtiene el nombre del bot
-  const botname = global.botname || 'Yatsuba IA'
-
-  // Obtiene el texto desde configuración o pon un mensaje por defecto
-  const texto = global.textoperfil || '¡Este es tu perfil personalizado!'
-
-  // Foto de perfil
-  let pp
+let handler = async (m, { conn, usedPrefix }) => {
   try {
-    pp = await conn.profilePictureUrl(usuario, 'image')
-  } catch (e) {
-    pp = 'https://i.imgur.com/5MuvYQn.png' // Imagen por defecto si no tiene foto
-  }
+    // Detecta el usuario mencionado o el que ejecuta el comando
+    let userId = m.mentionedJid && m.mentionedJid.length > 0
+      ? m.mentionedJid[0]
+      : (m.quoted ? m.quoted.sender : m.sender)
 
-  // Mensaje a enviar
-  const mensaje = `
-❖ Usuario » *@${username}*
-✰ ${moneda} » *${totalMonedas}*
+    // Obtiene datos del usuario
+    if (!global.db.data.users) global.db.data.users = {}
+    const user = global.db.data.users[userId] || {}
+
+    // Suma monedas
+    const coin = user.coin || 0
+    const bank = user.bank || 0
+    const totalMonedas = coin + bank
+
+    // Moneda configurada
+    const moneda = global.config?.moneda || 'Coins'
+    // Nombre del bot
+    const botname = global.botname || 'Yatsuba Nakano'
+    // Texto personalizado
+    const texto = global.textoperfil || '¡Este es tu perfil personalizado!'
+
+    // Nombre de usuario (mención)
+    const username = user.name || userId.split('@')[0]
+    // Foto de perfil (por defecto si no tiene)
+    let pp
+    try {
+      pp = await conn.profilePictureUrl(userId, 'image')
+    } catch {
+      pp = 'https://i.imgur.com/5MuvYQn.png'
+    }
+
+    // Mensaje final
+    const mensaje = `
+❖ Usuario » @${username}
+✰ ${moneda} » *${totalMonedas.toLocaleString()}*
 ✰ Bot » *${botname}*
 
 > ${texto}
 `.trim()
 
-  // Envía la foto con el mensaje, mencionando al usuario
-  await conn.sendMessage(m.chat, { 
-    image: { url: pp }, 
-    caption: mensaje, 
-    mentions: [usuario]
-  }, { quoted: m })
+    // Envía la foto con el mensaje y mención
+    await conn.sendMessage(m.chat, {
+      image: { url: pp },
+      caption: mensaje,
+      mentions: [userId]
+    }, { quoted: m })
+
+  } catch (error) {
+    await m.reply(`*🜸 Error, intenta más tarde.*`, m, rcanal)
+  }
 }
 
-// Comando
 handler.command = ['perfil', 'profile']
+handler.group = true
 export default handler
