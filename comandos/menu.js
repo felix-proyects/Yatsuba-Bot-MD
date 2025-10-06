@@ -1,14 +1,27 @@
 const handler = async (m, { conn }) => {
   const nombre = '@' + (m.sender?.split('@')[0] || 'usuario');
-  const texto = `Hola ${nombre} soy ${global.botname} 
+  const texto = `𝐇𝐨𝐥𝐚! *${nombre},* soy $*{global.botname}.*
 
-Subbots:
-• #code
-• #qr
 
-RPG:
+╭⬣「 ✰ 𝐈𝐧𝐟𝐨-𝐁𝐨𝐭 ✰ 」⬣
+│Creador: Félix
+│Estado: Activado
+│Comandos: 3
+╰───────────
 
-• #daily
+╭⬣「 ✰ 𝐑𝐏𝐆 ✰ 」⬣
+│#daily
+╰────────
+
+╭⬣「 ✰ 𝐆𝐑𝐔𝐏𝐎𝐒 ✰ 」
+│#tag
+│#hidetag
+╰────────
+
+╭⬣「 ✰ 𝐒𝐔𝐁𝐒 ✰ 」⬣
+│#qr
+│#code
+╰────────
 
 > ${global.texto}`;
 
@@ -24,5 +37,5 @@ RPG:
 };
 
 handler.command = ['menu', 'help'];
-
+handler.group = true
 export default handler;
