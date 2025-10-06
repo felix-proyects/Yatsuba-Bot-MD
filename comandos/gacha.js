@@ -1,35 +1,39 @@
 import fs from 'fs'
 import path from 'path'
 
+// Ruta del JSON de personajes
 const jsonPath = path.join(process.cwd(), 'jsons', 'gacha.json')
+
+// Cargar personajes
 function loadGacha() {
   return JSON.parse(fs.readFileSync(jsonPath, 'utf8'))
 }
+
+// Guardar personajes
 function saveGacha(data) {
   fs.writeFileSync(jsonPath, JSON.stringify(data, null, 2))
 }
 
-// Utilidad coins
+// Obtener coins del usuario
 function getUserCoins(userId) {
   const user = global.db.data.users[userId] || {}
   return (user.coin || 0) + (user.bank || 0)
 }
+
+// Sumar/restar coins del usuario
 function addUserCoins(userId, amt) {
   global.db.data.users[userId] = global.db.data.users[userId] || {}
   global.db.data.users[userId].coin = (global.db.data.users[userId].coin || 0) + amt
 }
 
-// Utilidad harem
+// Obtener personajes reclamados por usuario
 function getUserHarem(userId) {
   return Object.values(global.db.data.characters || {}).filter(c => c.user === userId)
 }
 
 // Cooldown por comando y usuario
 const COOLDOWN = 10 * 60 * 1000 // 10 minutos en ms
-global.db.data.cooldowns = global.db.data.cooldowns || {}
-
-function cooldownCheck(userId, cmd) {
-  global.db.data.cooldowns[userId] = global.db.data.cooldowns[userId] || {}
+global.db.data.cooldowns] || {}
   const last = global.db.data.cooldowns[userId][cmd] || 0
   const now = Date.now()
   if (now - last < COOLDOWN) {
@@ -43,9 +47,14 @@ function cooldownCheck(userId, cmd) {
 function formatTime(ms) {
   let s = Math.floor(ms / 1000), m = Math.floor(s / 60), h = Math.floor(m / 60)
   s %= 60; m %= 60; h %= 24
-  return `${h ? h + 'h ' : ''}${m ? m + 'm ' : ''}${s ? s + 's' : ''}`.trim()
+  let out = []
+  if (h) out.push(`${h}h`)
+  if (m) out.push(`${m}m`)
+  if (s) out.push(`${s}s`)
+  return out.join(' ')
 }
 
+// Manejador principal
 let handler = async (m, { conn, args, command, usedPrefix }) => {
   const userId = m.sender
   global.db.data.characters = global.db.data.characters || {}
@@ -126,7 +135,7 @@ let handler = async (m, { conn, args, command, usedPrefix }) => {
     return m.reply(`*🜸 Personaje "${pj.nombre}" puesto en venta por ${precio} coins.*`, m)
   }
 
-  // #buyc (personaje)
+  // #buypersonaje)
   if (/^buyc$/i.test(command)) {
     if (!args.length) return m.reply('*🜸 Usa: #buyc (Nombre)*', m)
     const nombre = args.join(' ')
