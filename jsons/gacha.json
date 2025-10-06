@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "nombre": "Makima",
+    "foto": "https://raw.githubusercontent.com/IrokzDal/uploads/main/1759791875520.jpeg",
+    "estado": "Libre"
+  },
+  {
+    "id": 2,
+    "nombre": "Chaisaw Man",
+    "foto": "https://qu.ax/ltPVv.jpg",
+    "estado": "Libre"
+  },
+  {
+    "id": 3,
+    "nombre": "Tsukasa Yugi",
+    "foto": "https://raw.githubusercontent.com/IrokzDal/uploads/main/1759792063844.jpeg",
+    "estado": "Libre"
+  },
+  {
+    "id": 4,
+    "nombre": "Hanako San",
+    "foto": "https://raw.githubusercontent.com/IrokzDal/uploads/main/1759792152493.jpeg",
+    "estado": "Libre"
+  },
+  {
+    "id": 5,
+    "nombre": "Makima",
+    "foto": "https://qu.ax/SLgti.jpg",
+    "estado": "Libre"
+  },
+  {
+    "id": 6,
+    "nombre": "Makima",
+    "foto": "https://qu.ax/UzmZj.jpg",
+    "estado": "Libre"
+  },
+  {
+    "id": 7,
+    "nombre": "Denji",
+    "foto": "https://qu.ax/aPKnG.jpg",
+    "estado": "Libre"
+  },
+  {
+    "id": 8,
+    "nombre": "KoKoShiBo",
+    "foto": "https://qu.ax/lzzXv.jpg",
+    "estado": "Libre"
+  },
+  {
+    "id": 9,
+    "nombre": "Himno",
+    "foto": "https://qu.ax/ptgWj.jpg",
+    "estado": "Libre"
+  },
+  {
+    "id": 10,
+    "nombre": "Furina",
+    "foto": "https://raw.githubusercontent.com/IrokzDal/uploads/main/1759792691687.jpeg",
+    "estado": "Libre"
+  }
+]
