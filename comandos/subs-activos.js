@@ -1,5 +1,3 @@
-// PROHIBIDO EDITAR
-// NOTA: Si editas los créditos del código puede que no te funcione, no es que sea malo solo esque ya nadie respeta créditos por eso lo ago.
 // Código creado por Félix.
 
 import ws from 'ws'
@@ -60,7 +58,7 @@ let handler = async (m, { conn }) => {
   if (botsEnGrupo > 0) {
     for (let b of botsEnGrupoDetalles) {
       const numero = b.jid.split('@')[0]
-      txt += `\t\t• [${b.tipo} ${botname}] » @${numero}\n`
+      txt += `\t\t• [${b.tipo}] » @${numero}\n`
     }
   } else {
     txt += '\t\t🜸 Ningún bot principal/sub en este grupo\n'
