@@ -1,4 +1,4 @@
-import { emoji } from '../config.js';
+import { emoji } from './yatsuba.js';
 
 let handler = async (m, { conn, participants, isAdmin, isBotAdmin }) => {
     // Solo admins pueden usar este comando
