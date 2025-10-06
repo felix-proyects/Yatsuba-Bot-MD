@@ -14,7 +14,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   const now = Date.now();
   if (now < user.lastCrime) {
     const wait = formatTime(user.lastCrime - now);
-    return conn.reply(m.chat, `🧡 Debes esperar *${wait}* para usar *${usedPrefix + command}* de nuevo.`, m);
+    return conn.reply(m.chat, `${emoji} Debes esperar *${wait}* Para volver a usar este comando`, m);
   }
 
   // Leer frases desde el JSON externo
