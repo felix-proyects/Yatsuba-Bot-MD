@@ -1,3 +1,5 @@
+// Código creado por Félix OFC 
+
 const handler = async (m, { conn }) => {
   const nombre = '@' + (m.sender?.split('@')[0] || 'usuario');
   const texto = `𝐇𝐨𝐥𝐚! *${nombre},* soy *${global.botname}*
