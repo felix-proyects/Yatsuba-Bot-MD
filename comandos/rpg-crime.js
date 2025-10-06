@@ -14,7 +14,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   const now = Date.now();
   if (now < user.lastCrime) {
     const wait = formatTime(user.lastCrime - now);
-    return conn.reply(m.chat, `🧡 Debes esperar *${wait}* para usar *${usedPrefix + command}* de nuevo.`, m, fake);
+    return conn.reply(m.chat, `🧡 Debes esperar *${wait}* para usar *${usedPrefix + command}* de nuevo.`, m);
   }
 
   // Leer frases desde el JSON externo
@@ -22,7 +22,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   try {
     crimes = JSON.parse(fs.readFileSync(CRIME_PATH));
   } catch {
-    return conn.reply(m.chat, '🧡 Error al cargar las frases de crimen.', m, fake);
+    return conn.reply(m.chat, '🧡 Error al cargar las frases de crimen.', m);
   }
 
   // Elegir crimen aleatorio
@@ -33,7 +33,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
   user.lastCrime = now + COOLDOWN;
 
   // Mensaje de resultado
-  await conn.reply(m.chat, `🧡 ${picked.frase}, obtuviste *${picked.cantidad.toLocaleString()}* monedas.`, m, fake);
+  await conn.reply(m.chat, `🧡 ${picked.frase}, obtuviste *${picked.cantidad.toLocaleString()}* monedas.`, m);
 };
 
 handler.command = ['crimen', 'crime'];
